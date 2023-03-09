@@ -110,7 +110,7 @@ autoplot(Temperatures_TS_Berlin)
 boxcox(lm(Temperatures_TS[,1] ~ 1))
 ```
 
-Because the 
+When rounding to the closest $lambda$ value, $lambda = 1$. Therefore, we do not need to make any BoxCox transformations to the data.
 
 ```{r}
 acf(Temperatures_TS[,1])
