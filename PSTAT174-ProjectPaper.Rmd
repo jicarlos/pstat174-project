@@ -12,22 +12,57 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+\doublespace
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Within a century, the world has seen great changes in its climate.[] Countries 
+around the world have now been experiencing harsher weather patterns with 
+extreme weather events becoming the norm. Among these changes is a global change
+in temperature. In order to find the significance of the climate change, data 
+about the temperature over tens of years in different places around the world
+would be necessary. Thankfully, there exists such data and this will be an analysis
+focusing on climate change within Europe.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+FIX THIS^^^^^ Its too elementary
 
-```{r cars}
-summary(cars)
-```
+Analyzing Europe would be beneficial because of the different climates throughout
+the continent while still being relatively closer together. This makes it so that
+there could be an analysis around location and temperature change. Because the 
+location and the environment could have an effect on the climate, it is necessary 
+to look that these variables and see they make any significant difference to the
+temperature.
 
-## Including Plots
+The data originates from the website [Data Commons](https://www.datacommons.org/)
+and they had acquired their data from [noaa.gov](https://www.noaa.gov/) also
+known as, \textbf{National Ocean and Atmospheric Administration}. 
 
-You can also embed plots, for example:
+Being able to tell whether there is a significant change in the climate would
+make understanding just how problematic global warming really is. It would allow
+people to be able to get a digestible number that can anyone can understand. It
+can make people really understand how the world is changing without having to 
+fully explain everything that is really going on. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+This is a very common thing to study because of how important understanding 
+climate change its recent effects. This means that there are definitely plenty
+of researchers also studying this data.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Just how much has the temperature increased? Are there differences in the amount
+of temperature increase and the location? If location matters, is it an effect 
+of the environment or is it an effect of solely the location?
+
+![Figure 1](figures/timeseries.png)
+
+![Figure 2](figures/timeseriesfacets.png)
+
+![Figure 3](figures/boxcox.png)
+
+![Figure 4](figures/acfdiff0.png)
+
+![Figure 5](figures/acfdiff1.png)
+
+![Figure 6](figures/acfdiff2.png)
+
+![Figure 7](figures/decompberlin.png)
+
+
+
+

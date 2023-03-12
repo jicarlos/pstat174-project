@@ -25,10 +25,7 @@ library(fabletools)
 library(reshape2)
 ```
 
-
 \doublespace
-
-
 
 ```{r}
 EU_Max_Temperatures <- read.csv("Temperatures_In_Europe.csv")
@@ -43,7 +40,6 @@ However, there is some missing data within the column for Rome as seen above so 
 ```{r}
 EU_Max_Temperatures <- EU_Max_Temperatures[EU_Max_Temperatures$date >= '1951-01',]
 head(EU_Max_Temperatures, 5)
-
 ```
 
 ```{r}
@@ -54,31 +50,27 @@ autoplot(Temperatures_TS, facets = TRUE)
 ```
 
 ```{r}
-Temperatures_TS_Berlin <- diff(Temperatures_TS[,1])
-Temperatures_TS_Paris <- diff(Temperatures_TS[,2])
-Temperatures_TS_Copenhagen <- diff(Temperatures_TS[,3])
-Temperatures_TS_stockholm <- diff(Temperatures_TS[,4])
-Temperatures_TS_Rome <- diff(Temperatures_TS[,5])
-
-plot(diff(Temperatures_TS[,1], differences = 1))
-plot(diff(Temperatures_TS[,1], differences = 2))
-```
-
-```{r}
 boxcox(lm(Temperatures_TS[,1] ~ 1))
 ```
 
+```{r}
+Temperatures_TS[,1] %>% 
+  ggtsdisplay()
+
+Temperatures_TS[,1] %>% 
+  diff(lag = 24) %>%
+  ggtsdisplay()
+
+Temperatures_TS[,1] %>% 
+  diff(lag = 24) %>% diff() %>%
+  ggtsdisplay()
+```
+
+
+
 When rounding to the closest $lambda$ value, $lambda = 1$. Therefore, we do not need to make any BoxCox transformations to the data.
 
-```{r}
-par(mfcol = c(2,2))
 
-acf(Temperatures_TS[,1])
-pacf(Temperatures_TS[,1])
-
-acf(Temperatures_TS_Berlin)
-pacf(Temperatures_TS_Berlin)
-```
 
 ```{r}
 Decomp_Temperatures_TS_Berlin <- decompose(Temperatures_TS[,1])
@@ -100,11 +92,6 @@ Box.test(Temperatures_TS[,1], type = c("Ljung-Box"), fitdf = 0)
 ```
 
 ```{r}
-Temperatures_TS[,1] <- Temperatures_TS[,1] - Decomp_Temperatures_TS_Berlin$seasonal
-
-
-plot(Temperatures_TS[,1])
-lines(Decomp_Temperatures_TS_Berlin$trend, col = "red")
-fit.auto <- auto.arima(Temperatures_TS[,1], max.order = 2, trace = TRUE)
+fit.auto <- auto.arima(Temperatures_TS[,1], seasonal = TRUE, trace = TRUE)
 ```
 
