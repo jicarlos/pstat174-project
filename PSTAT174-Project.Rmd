@@ -28,40 +28,7 @@ library(reshape2)
 
 \doublespace
 
-Within a century, the world has seen great changes in its climate.[] Countries 
-around the world have now been experiencing harsher weather patterns with 
-extreme weather events becoming the norm. Among these changes is a global change
-in temperature. In order to find the significance of the climate change, data 
-about the temperature over tens of years in different places around the world
-would be necessary. Thankfully, there exists such data and this will be an analysis
-focusing on climate change within Europe.
 
-FIX THIS^^^^^ Its too elementary
-
-Analyzing Europe would be beneficial because of the different climates throughout
-the continent while still being relatively closer together. This makes it so that
-there could be an analysis around location and temperature change. Because the 
-location and the environment could have an effect on the climate, it is necessary 
-to look that these variables and see they make any significant difference to the
-temperature.
-
-The data originates from the website [Data Commons](https://www.datacommons.org/)
-and they had acquired their data from [noaa.gov](https://www.noaa.gov/) also
-known as, \textbf{National Ocean and Atmospheric Administration}. 
-
-Being able to tell whether there is a significant change in the climate would
-make understanding just how problematic global warming really is. It would allow
-people to be able to get a digestible number that can anyone can understand. It
-can make people really understand how the world is changing without having to 
-fully explain everything that is really going on. 
-
-This is a very common thing to study because of how important understanding 
-climate change its recent effects. This means that there are definitely plenty
-of researchers also studying this data.
-
-Just how much has the temperature increased? Are there differences in the amount
-of temperature increase and the location? If location matters, is it an effect 
-of the environment or is it an effect of solely the location?
 
 ```{r}
 EU_Max_Temperatures <- read.csv("Temperatures_In_Europe.csv")
@@ -79,17 +46,8 @@ head(EU_Max_Temperatures, 5)
 
 ```
 
-###########
-
-```{r}
-# try to get a plot of EU_Max_Temperatures in here if not whatever
-```
-
-#############
-
 ```{r}
 Temperatures_TS <- ts(EU_Max_Temperatures[,c(2:6)], start = c(1951), frequency = 12)
-head(Temperatures_TS)
 
 autoplot(Temperatures_TS)
 autoplot(Temperatures_TS, facets = TRUE)
@@ -102,8 +60,8 @@ Temperatures_TS_Copenhagen <- diff(Temperatures_TS[,3])
 Temperatures_TS_stockholm <- diff(Temperatures_TS[,4])
 Temperatures_TS_Rome <- diff(Temperatures_TS[,5])
 
-par(mfrow = c(2,3))
-autoplot(Temperatures_TS_Berlin)
+plot(diff(Temperatures_TS[,1], differences = 1))
+plot(diff(Temperatures_TS[,1], differences = 2))
 ```
 
 ```{r}
@@ -113,6 +71,40 @@ boxcox(lm(Temperatures_TS[,1] ~ 1))
 When rounding to the closest $lambda$ value, $lambda = 1$. Therefore, we do not need to make any BoxCox transformations to the data.
 
 ```{r}
+par(mfcol = c(2,2))
+
 acf(Temperatures_TS[,1])
+pacf(Temperatures_TS[,1])
+
+acf(Temperatures_TS_Berlin)
+pacf(Temperatures_TS_Berlin)
+```
+
+```{r}
+Decomp_Temperatures_TS_Berlin <- decompose(Temperatures_TS[,1])
+Decomp_Temperatures_TS_Paris <- decompose(Temperatures_TS[,2])
+Decomp_Temperatures_TS_Copenhagen <- decompose(Temperatures_TS[,3])
+Decomp_Temperatures_TS_Stockholm <- decompose(Temperatures_TS[,4])
+Decomp_Temperatures_TS_Rome <- decompose(Temperatures_TS[,5])
+
+autoplot(Decomp_Temperatures_TS_Berlin)
+autoplot(Decomp_Temperatures_TS_Paris)
+autoplot(Decomp_Temperatures_TS_Copenhagen)
+autoplot(Decomp_Temperatures_TS_Stockholm)
+autoplot(Decomp_Temperatures_TS_Rome)
+```
+
+```{r}
+Box.test(Temperatures_TS[,1], type = c("Box-Pierce"), fitdf = 0)
+Box.test(Temperatures_TS[,1], type = c("Ljung-Box"), fitdf = 0)
+```
+
+```{r}
+Temperatures_TS[,1] <- Temperatures_TS[,1] - Decomp_Temperatures_TS_Berlin$seasonal
+
+
+plot(Temperatures_TS[,1])
+lines(Decomp_Temperatures_TS_Berlin$trend, col = "red")
+fit.auto <- auto.arima(Temperatures_TS[,1], max.order = 2, trace = TRUE)
 ```
 
