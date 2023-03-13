@@ -96,3 +96,20 @@ Box.test(Temperatures_TS[,1], type = c("Ljung-Box"), fitdf = 0)
 fit.auto <- auto.arima(Temperatures_TS[,1], seasonal = TRUE, trace = TRUE)
 ```
 
+
+```{r}
+#Get mean and variance of time series
+
+mean_Berlin <- sum(EU_Max_Temperatures[2])/nrow(EU_Max_Temperatures[2])
+mean_Paris <- sum(EU_Max_Temperatures[3])/nrow(EU_Max_Temperatures[3])
+mean_Copenhagen <- sum(EU_Max_Temperatures[4])/nrow(EU_Max_Temperatures[4])
+mean_Stockholm <- sum(EU_Max_Temperatures[5])/nrow(EU_Max_Temperatures[5])
+mean_Rome <- sum(EU_Max_Temperatures[6])/nrow(EU_Max_Temperatures[6])
+
+var_Berlin <- var(EU_Max_Temperatures[2])
+var_Paris <- var(mean_Paris)
+var_Copenhagen <- var(mean_Copenhagen)
+var_Stockholm <- var(mean_Stockholm)
+var_Rome <- var(mean_Rome)
+```
+
