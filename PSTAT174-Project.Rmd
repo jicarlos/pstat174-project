@@ -45,6 +45,7 @@ head(EU_Max_Temperatures, 5)
 ```{r}
 Temperatures_TS <- ts(EU_Max_Temperatures[,c(2:6)], start = c(1951), frequency = 12)
 
+options(repr.plot.width =2, repr.plot.height =3)
 autoplot(Temperatures_TS)
 autoplot(Temperatures_TS, facets = TRUE)
 ```
