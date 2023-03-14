@@ -1,5 +1,5 @@
 ---
-title: "PSTAT174-Project"
+title: "5 European Cities' Temperatures Analysis"
 author: "Jon Carlos (3872520)"
 date: "2023-03-13"
 output: pdf_document
