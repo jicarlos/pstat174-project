@@ -67,7 +67,57 @@ Temperatures_TS[,1] %>%
   ggtsdisplay()
 ```
 
+```{r}
+Temperatures_TS[,2] %>% 
+  ggtsdisplay()
 
+Temperatures_TS[,2] %>% 
+  diff(lag = 24) %>%
+  ggtsdisplay()
+
+Temperatures_TS[,2] %>% 
+  diff(lag = 24) %>% diff() %>%
+  ggtsdisplay()
+```
+
+```{r}
+Temperatures_TS[,3] %>% 
+  ggtsdisplay()
+
+Temperatures_TS[,3] %>% 
+  diff(lag = 24) %>%
+  ggtsdisplay()
+
+Temperatures_TS[,3] %>% 
+  diff(lag = 24) %>% diff() %>%
+  ggtsdisplay()
+```
+
+```{r}
+Temperatures_TS[,4] %>% 
+  ggtsdisplay()
+
+Temperatures_TS[,4] %>% 
+  diff(lag = 24) %>%
+  ggtsdisplay()
+
+Temperatures_TS[,4] %>% 
+  diff(lag = 24) %>% diff() %>%
+  ggtsdisplay()
+```
+
+```{r}
+Temperatures_TS[,5] %>% 
+  ggtsdisplay()
+
+Temperatures_TS[,5] %>% 
+  diff(lag = 24) %>%
+  ggtsdisplay()
+
+Temperatures_TS[,5] %>% 
+  diff(lag = 24) %>% diff() %>%
+  ggtsdisplay()
+```
 
 When rounding to the closest $lambda$ value, $lambda = 1$. Therefore, we do not need to make any BoxCox transformations to the data.
 
@@ -85,6 +135,8 @@ autoplot(Decomp_Temperatures_TS_Paris)
 autoplot(Decomp_Temperatures_TS_Copenhagen)
 autoplot(Decomp_Temperatures_TS_Stockholm)
 autoplot(Decomp_Temperatures_TS_Rome)
+
+
 ```
 
 ```{r}
@@ -93,7 +145,11 @@ Box.test(Temperatures_TS[,1], type = c("Ljung-Box"), fitdf = 0)
 ```
 
 ```{r}
-fit.auto <- auto.arima(Temperatures_TS[,1], seasonal = TRUE, trace = TRUE)
+fit.auto1 <- auto.arima(Temperatures_TS[,1], seasonal = TRUE, allowdrift = FALSE)
+fit.auto2 <- auto.arima(Temperatures_TS[,2], seasonal = TRUE, allowdrift = FALSE)
+fit.auto3 <- auto.arima(Temperatures_TS[,3], seasonal = TRUE, allowdrift = FALSE)
+fit.auto4 <- auto.arima(Temperatures_TS[,4], seasonal = TRUE, allowdrift = FALSE)
+fit.auto5 <- auto.arima(Temperatures_TS[,5], seasonal = TRUE, allowdrift = FALSE)
 ```
 
 
@@ -105,11 +161,152 @@ mean_Paris <- sum(EU_Max_Temperatures[3])/nrow(EU_Max_Temperatures[3])
 mean_Copenhagen <- sum(EU_Max_Temperatures[4])/nrow(EU_Max_Temperatures[4])
 mean_Stockholm <- sum(EU_Max_Temperatures[5])/nrow(EU_Max_Temperatures[5])
 mean_Rome <- sum(EU_Max_Temperatures[6])/nrow(EU_Max_Temperatures[6])
-
-var_Berlin <- var(EU_Max_Temperatures[2])
-var_Paris <- var(mean_Paris)
-var_Copenhagen <- var(mean_Copenhagen)
-var_Stockholm <- var(mean_Stockholm)
-var_Rome <- var(mean_Rome)
 ```
+
+
+```{r}
+forecasts_fit.auto1 <- forecast(fit.auto1)
+forecasts_fit.auto2 <- forecast(fit.auto2)
+forecasts_fit.auto3 <- forecast(fit.auto3)
+forecasts_fit.auto4 <- forecast(fit.auto4)
+forecasts_fit.auto5 <- forecast(fit.auto5)
+
+plot(forecasts_fit.auto1)
+plot(forecasts_fit.auto2)
+plot(forecasts_fit.auto3)
+plot(forecasts_fit.auto4)
+plot(forecasts_fit.auto5)
+```
+
+```{r}
+fit.Berlin <- Arima(Temperatures_TS[,1], order = c(0,0,1), seasonal = c(1,1,0))
+fit.Berlin
+acf(fit.Berlin$residuals)
+
+fit.Berlin %>%
+  residuals() %>%
+  ggtsdisplay()
+
+fit.Berlin <- Arima(Temperatures_TS[,1], order = c(0,1,1), seasonal = c(1,1,1))
+fit.Berlin
+acf(fit.Berlin$residuals)
+
+fit.Berlin <- Arima(Temperatures_TS[,1], order = c(1,1,1), seasonal = c(1,1,1))
+fit.Berlin
+acf(fit.Berlin$residuals)
+
+fit.Berlin %>%
+  residuals() %>%
+  ggtsdisplay()
+
+checkresiduals(fit.Berlin)
+
+forecast.Berlin <- forecast(fit.Berlin)
+
+autoplot(forecast.Berlin)
+```
+
+```{r}
+fit.Paris <- Arima(Temperatures_TS[,2], order = c(0,0,1), seasonal = c(1,1,0))
+fit.Paris
+acf(fit.Paris$residuals)
+
+fit.Paris <- Arima(Temperatures_TS[,2], order = c(0,1,1), seasonal = c(1,1,1))
+fit.Paris
+acf(fit.Paris$residuals)
+
+fit.Paris <- Arima(Temperatures_TS[,2], order = c(1,1,1), seasonal = c(1,1,1))
+fit.Paris
+acf(fit.Paris$residuals)
+
+fit.Paris %>%
+  residuals() %>%
+  ggtsdisplay()
+
+checkresiduals(fit.Paris)
+
+forecast.Paris <- forecast(fit.Paris)
+
+autoplot(forecast.Paris)
+```
+
+```{r}
+fit.Copen <- Arima(Temperatures_TS[,3], order = c(1,0,0), seasonal = c(1,1,0))
+fit.Copen
+acf(fit.Copen$residuals)
+
+fit.Copen <- Arima(Temperatures_TS[,3], order = c(1,1,0), seasonal = c(1,1,1))
+fit.Copen
+acf(fit.Copen$residuals)
+
+fit.Copen <- Arima(Temperatures_TS[,3], order = c(1,1,1), seasonal = c(1,1,1))
+fit.Copen
+acf(fit.Copen$residuals)
+
+fit.Copen %>%
+  residuals() %>%
+  ggtsdisplay()
+
+checkresiduals(fit.Copen)
+
+forecast.Copen <- forecast(fit.Copen)
+
+autoplot(forecast.Copen)
+```
+
+```{r}
+fit.Stock <- Arima(Temperatures_TS[,4], order = c(1,0,0), seasonal = c(1,1,0))
+fit.Stock
+acf(fit.Copen$residuals)
+
+fit.Stock <- Arima(Temperatures_TS[,4], order = c(1,1,0), seasonal = c(1,1,1))
+fit.Stock
+acf(fit.Stock$residuals)
+
+fit.Stock <- Arima(Temperatures_TS[,4], order = c(1,1,1), seasonal = c(1,1,1))
+fit.Stock
+acf(fit.Stock$residuals)
+
+fit.Stock %>%
+  residuals() %>%
+  ggtsdisplay()
+
+checkresiduals(fit.Stock)
+
+forecast.Stock <- forecast(fit.Stock)
+
+autoplot(forecast.Stock)
+```
+
+```{r}
+fit.Rome <- Arima(Temperatures_TS[,5], order = c(1,0,1), seasonal = c(1,1,0))
+fit.Rome
+acf(fit.Rome$residuals)
+
+fit.Rome <- Arima(Temperatures_TS[,5], order = c(1,1,1), seasonal = c(2,1,1))
+fit.Rome
+acf(fit.Rome$residuals)
+
+fit.Rome <- Arima(Temperatures_TS[,5], order = c(1,1,1), seasonal = c(1,1,1))
+fit.Rome
+acf(fit.Rome$residuals)
+
+fit.Rome %>%
+  residuals() %>%
+  ggtsdisplay()
+
+checkresiduals(fit.Rome)
+
+forecast.Rome <- forecast(fit.Rome)
+
+autoplot(forecast.Rome)
+
+fit.Rome %>%
+  forecast(h=36) %>%
+  autoplot()
+```
+
+
+
+
 
